@@ -1,0 +1,140 @@
+#:kivy 1.0
+#:import kivy kivy
+#:import win kivy.core.window
+#:import log kivy.logger.Logger
+
+<FlatButton>:
+    canvas.before:
+        Color:
+            rgba: (0.2,0.64,0.81,1) if self.state == 'down' else (1,1,1,0)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [3,]
+        Color:
+            rgba: (0.2,0.64,0.81,1)
+        Line:
+            width: dp(1)
+            rounded_rectangle: (self.x+dp(1), self.y+dp(1), self.width-dp(2), self.height-dp(2),3)
+
+
+<BoxTool@BoxLayout>
+    padding: dp(5)
+    canvas.after:
+        Color: 
+            rgba: (0.18,0.66,0.83,1)
+        Line:
+            width: dp(1)
+            points: self.x+dp(1),self.y+dp(1), self.x + 0.2*min(self.size), self.y+dp(1)
+        Line:
+            width: dp(1)
+            points: self.x+dp(1),self.y+dp(1), self.x+dp(1),  self.y+dp(1) + 0.2*min(self.size)
+        Line:
+            width: dp(1)
+            points: self.right-dp(1),self.top-dp(1), self.right-dp(1),  self.top - 0.2*min(self.size)
+        Line:
+            width: dp(1)
+            points: self.right-dp(1),self.top-dp(1), self.right-dp(1) - 0.2*min(self.size),  self.top-dp(1)
+
+
+<PopupTrans@Popup>
+    title: 'Check'
+    size_hint: 0.5,0.5
+    background_color: 00.35,0.35,0.35,0.7
+    auto_dismiss: False
+    canvas.after:
+        Color: 
+            rgba: (0.18,0.66,0.83,1)
+        Line:
+            width: dp(1)
+            points: self.x+dp(1),self.y+dp(1), self.x + 0.2*min(self.size), self.y+dp(1)
+        Line:
+            width: dp(1)
+            points: self.x+dp(1),self.y+dp(1), self.x+dp(1),  self.y + 0.2*min(self.size)
+        Line:
+            width: dp(1)
+            points: self.right-dp(1),self.top-dp(1), self.right-dp(1),  self.top - 0.2*min(self.size)
+        Line:
+            width: dp(1)
+            points: self.right-dp(1),self.top-dp(1), self.right - 0.2*min(self.size),  self.top-dp(1)
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Stop App ?'
+        BoxLayout:
+            size_hint_y: None
+            height: dp(30)
+            orientation: 'horizontal'
+            spacing: dp(10)
+            FlatButton:
+                text: 'Ok'
+                on_release: app.stop()
+            FlatButton:
+                text: 'Cancel'
+                on_release: root.dismiss()
+            
+
+FloatLayout:
+    on_size: app.resize(self)
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 0.3
+        Rectangle:
+            source: 'bg.png'
+            size: min(self.size), min(self.size)
+            pos: self.center_x-min(self.size)/2, self.center_y-min(self.size)/2
+
+    BoxLayout:
+        padding: dp(10)
+        spacing: dp(10)
+        size_hint: 1, None
+        pos_hint: {'top': 1}
+        height: dp(44)
+        FlatButton:
+            size_hint_x: None
+            width: dp(60)
+            text: 'Reboot'
+            on_release: app.reboot()
+        FlatButton:
+            size_hint_x: None
+            width: dp(60)
+            text: 'Quit'
+            on_release: app.open_pp()
+        Image:
+            size_hint: None, None
+            size: dp(24), dp(24)
+            source: 'data/logo/kivy-icon-24.png'
+        Label:
+            height: dp(24)
+            text_size: self.width, None
+            color: (1, 1, 1, .8)
+            text: "Kivy {} - (screen {})".format(kivy.__version__, win.Window.size)
+
+<TransparentImage@Image>:
+
+<Picture>:
+    # each time a picture is created, the image can delay the loading
+    # as soon as the image is loaded, ensure that the center is changed
+    # to the center of the screen.
+    on_size: self.center = win.Window.center
+    size: image.size
+    size_hint: None, None
+    do_rotation: False
+    scale: 0.5
+    scale_max: 100
+    scale_min: 0.25
+    TransparentImage:
+        id: image
+        source: root.source
+        size: self.texture.size
+        allow_stretch: True
+        keep_ratio: False
+        keep_data: True
+        canvas.before:
+            Color:
+                rgba: 1,0,0,0.2
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+
