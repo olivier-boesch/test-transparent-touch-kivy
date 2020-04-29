@@ -47,7 +47,7 @@ if platform != 'android':
     Config.set('kivy', 'desktop', '1')
     Config.set('graphics', 'fullscreen', 'auto')
 
-Config.set('modules', 'touchring', 'image=touch.png,scale=.1,alpha=1')
+Config.set('modules', 'touchring', 'image=touch.png,scale=.5,alpha=1')
 
 class FlatButton(ButtonBehavior, Label):
     text = StringProperty("")
